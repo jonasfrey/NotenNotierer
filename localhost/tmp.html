@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piano Sound with Tone.js</title>
+</head>
+<body>
+    <h1>Play a Piano Note</h1>
+    <button id="play-btn">Play A4 (440 Hz) for 1 second</button>
+
+    <!-- Load Tone.js from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.39/Tone.js"></script>
+    <script>
+        let sampler;
+        
+        // Initialize the sampler and preload the samples
+        async function loadSampler() {
+            sampler = new Tone.Sampler({
+                urls: {
+                    A4: "A4.mp3",
+                },
+                baseUrl: "https://tonejs.github.io/audio/salamander/",
+            }).toDestination();
+
+            // Wait until all samples are loaded
+            await Tone.loaded();
+            console.log('Sampler is ready');
+        }
+
+        // Function to play a note at a specific frequency and duration
+        function playNote(frequency, duration) {
+            if (!sampler) {
+                console.log('Sampler not loaded yet');
+                return;
+            }
+
+            // Ensure the AudioContext has started (Tone.js requires user interaction)
+            Tone.start().then(() => {
+                // Trigger the note at the given frequency and duration
+                sampler.triggerAttackRelease(Tone.Frequency(frequency), duration / 1000);
+            });
+        }
+
+        // Attach event listener to the button
+        document.getElementById('play-btn').addEventListener('click', () => {
+            playNote(440, 1000); // Play A4 (440 Hz) for 1 second
+        });
+
+        // Load the sampler after the page has loaded
+        window.onload = loadSampler;
+    </script>
+</body>
+</html>

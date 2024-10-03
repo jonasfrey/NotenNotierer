@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://unpkg.com/vexflow/releases/vexflow-min.js"></script>
+</head>
+<body>
+    <canvas id="vf"></canvas>
+    <script>
+        const VF = Vex.Flow;
+
+        // Get the canvas element where the music will be drawn
+        const div = document.getElementById('vf');
+        const factory = new VF.Factory({
+            renderer: { elementId: div, width: 600, height: 400 } // Correctly set elementId
+        });
+        const score = factory.EasyScore();
+        const context = factory.context;
+        context.setFont("Arial", 10, "").setBackgroundFillStyle("#eed");
+
+        // Create a system to manage staves
+        const system = new VF.System({ x: 50, y: 50, width: 500, spaceBetweenStaves: 10 });
+
+        // Create a 4/4 treble stave and add notes for the first bar
+        system.addStave({
+            voices: [
+                new VF.Voice({ num_beats: 4, beat_value: 4 }).addTickables([
+                    new VF.StaveNote({ keys: ["c/4"], duration: "q" }),
+                    new VF.StaveNote({ keys: ["d/4"], duration: "q" }),
+                    new VF.StaveNote({ keys: ["e/4"], duration: "q" }),
+                    new VF.StaveNote({ keys: ["f/4"], duration: "q" })
+                ])
+            ]
+        }).addClef('treble').addTimeSignature('4/4');
+
+        // Create the second bar with different notes
+        system.addStave({
+            voices: [
+                new VF.Voice({ num_beats: 4, beat_value: 4 }).addTickables([
+                    new VF.StaveNote({ keys: ["g/4"], duration: "q" }),
+                    new VF.StaveNote({ keys: ["a/4"], duration: "q" }),
+                    new VF.StaveNote({ keys: ["b/4"], duration: "q" }),
+                    new VF.StaveNote({ keys: ["c/5"], duration: "q" })
+                ])
+            ]
+        }).addClef('treble').addTimeSignature('4/4');
+
+        // Create a third bar
+        system.addStave({
+            voices: [
+                new VF.Voice({ num_beats: 4, beat_value: 4 }).addTickables([
+                    new VF.StaveNote({ keys: ["d/5"], duration: "q" }),
+                    new VF.StaveNote({ keys: ["e/5"], duration: "q" }),
+                    new VF.StaveNote({ keys: ["f/5"], duration: "q" }),
+                    new VF.StaveNote({ keys: ["g/5"], duration: "q" })
+                ])
+            ]
+        }).addClef('treble').addTimeSignature('4/4');
+
+        // Draw everything to the canvas
+        system.format([system], 500);
+        system.draw(context);
+    </script>
+</body>
+</html>

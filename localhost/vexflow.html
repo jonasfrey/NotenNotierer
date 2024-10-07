@@ -1,64 +1,250 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <script src="https://unpkg.com/vexflow/releases/vexflow-min.js"></script>
+<meta charset="UTF-8">
+<title>Sheet Music Generator</title>
+<script src="https://unpkg.com/vexflow/releases/vexflow-debug.js"></script>
+<style>
+  #sheet {
+    border: 1px solid black;
+  }
+</style>
 </head>
 <body>
-    <canvas id="vf"></canvas>
-    <script>
-        const VF = Vex.Flow;
+<canvas id="sheet"></canvas>
+<script type="module">
+    import {
+    f_o_html__and_make_renderable,
+}
+from 'https://deno.land/x/f_o_html_from_o_js@4.0.2/mod.js'
+    // Your data structures
+    let o_ionian = {n_freq_base_a4: 440, s_name_kirchen_ladder: 'ionian'};
+    let a_o_bar = [
+        { // object 'o_bar'
+            n_time_signature_numerator: 4,
+            n_time_signature_denominator: 4,
+            n_bpm: 80,
+            a_o_note: [
+                { n_duration_nor: 1./4., n_step: 1,...o_ionian },
+                { n_duration_nor: 1./4., n_step: 2,...o_ionian },
+                { n_duration_nor: 1./4., n_step: 3,...o_ionian },
+                { n_duration_nor: 1./4., n_step: 1,...o_ionian },
+            ]
+        },
+        { // object 'o_bar'
+            n_time_signature_numerator: 4,
+            n_time_signature_denominator: 4,
+            n_bpm: 80,
+            a_o_note: [
+                { n_duration_nor: 1./4., n_step: 1,...o_ionian },
+                { n_duration_nor: 1./4., n_step: 2,...o_ionian },
+                { n_duration_nor: 1./4., n_step: 3,...o_ionian },
+                { n_duration_nor: 1./4., n_step: 1,...o_ionian },
+            ]
+        },
+        { // object 'o_bar'
+            n_time_signature_numerator: 4,
+            n_time_signature_denominator: 4,
+            n_bpm: 80,
+            a_o_note: [
+                { n_duration_nor: 1./4., n_step: 3,...o_ionian },
+                { n_duration_nor: 1./4., n_step: 4,...o_ionian },
+                { n_duration_nor: 2./4., n_step: 5,...o_ionian },
+            ]
+        },
+        { // object 'o_bar'
+            n_time_signature_numerator: 4,
+            n_time_signature_denominator: 4,
+            n_bpm: 80,
+            a_o_note: [
+                { n_duration_nor: 1./4., n_step: 3,...o_ionian },
+                { n_duration_nor: 1./4., n_step: 4,...o_ionian },
+                { n_duration_nor: 2./4., n_step: 5,...o_ionian },
+            ]
+        },
+        { // object 'o_bar'
+            n_time_signature_numerator: 4,
+            n_time_signature_denominator: 4,
+            n_bpm: 80,
+            a_o_note: [
+                { n_duration_nor: 1./8., n_step: 5,...o_ionian },
+                { n_duration_nor: 1./8., n_step: 6,...o_ionian },
+                { n_duration_nor: 1./8., n_step: 5,...o_ionian },
+                { n_duration_nor: 1./8., n_step: 4,...o_ionian },
+                { n_duration_nor: 1./4., n_step: 3,...o_ionian },
+                { n_duration_nor: 1./4., n_step: 1,...o_ionian },
+            ]
+        },
+        { // object 'o_bar'
+            n_time_signature_numerator: 4,
+            n_time_signature_denominator: 4,
+            n_bpm: 80,
+            a_o_note: [
+                { n_duration_nor: 1./8., n_step: 5,...o_ionian },
+                { n_duration_nor: 1./8., n_step: 6,...o_ionian },
+                { n_duration_nor: 1./8., n_step: 5,...o_ionian },
+                { n_duration_nor: 1./8., n_step: 4,...o_ionian },
+                { n_duration_nor: 1./4., n_step: 3,...o_ionian },
+                { n_duration_nor: 1./4., n_step: 1,...o_ionian },
+            ]
+        },
+        { // object 'o_bar'
+            n_time_signature_numerator: 4,
+            n_time_signature_denominator: 4,
+            n_bpm: 80,
+            a_o_note: [
+                { n_duration_nor: 1./4., n_step: 1,...o_ionian },
+                { n_duration_nor: 1./4., n_step: 5,...o_ionian },
+                { n_duration_nor: 2./4., n_step: 1,...o_ionian },
+            ]
+        },
+        { // object 'o_bar'
+            n_time_signature_numerator: 4,
+            n_time_signature_denominator: 4,
+            n_bpm: 80,
+            a_o_note: [
+                { n_duration_nor: 1./4., n_step: 1,...o_ionian },
+                { n_duration_nor: 1./4., n_step: 5,...o_ionian },
+                { n_duration_nor: 2./4., n_step: 1,...o_ionian },
+            ]
+        }
+    ];
+    // Corrected index to match existing note (since indexing starts at 0)
+    let o_note__current = a_o_bar[2].a_o_note[2];
 
-        // Get the canvas element where the music will be drawn
-        const div = document.getElementById('vf');
-        const factory = new VF.Factory({
-            renderer: { elementId: div, width: 600, height: 400 } // Correctly set elementId
+    // VexFlow setup
+    var VF = Vex.Flow;
+
+    // Canvas setup
+    var canvas = document.getElementById('sheet');
+    var width = 720; // Adjust as needed (e.g., 2048)
+    var height = width * 1.4; // Aspect ratio 1:1.4
+    canvas.width = width;
+    canvas.height = height;
+
+    var renderer = new VF.Renderer(canvas, VF.Renderer.Backends.CANVAS);
+    renderer.resize(width, height);
+    var context = renderer.getContext();
+
+    // Layout settings
+    var margin_top = 20;
+    var margin_left = 20;
+    var stave_height = 80;
+    var stave_spacing = 50;
+    var bars_per_line = 4;
+    var stave_width = (width - 2 * margin_left) / bars_per_line;
+
+    // Function to map n_step to note pitch
+    function mapStepToPitch(n_step) {
+        var steps = ['c', 'd', 'e', 'f', 'g', 'a', 'b'];
+        var octave = 4;
+        var index = (n_step - 1) % 7;
+        var noteName = steps[index];
+        octave += Math.floor((n_step - 1) / 7);
+        return noteName + '/' + octave;
+    }
+
+    // Function to map n_duration_nor to duration string
+    function mapDuration(n_duration_nor) {
+        var fraction = n_duration_nor.toString();
+        var durationMap = {
+            '1': 'w',
+            '0.75': 'hd', // dotted half
+            '0.5': 'h',
+            '0.375': 'qd', // dotted quarter
+            '0.25': 'q',
+            '0.1875': '8d', // dotted eighth
+            '0.125': '8',
+            '0.0625': '16'
+        };
+        // Handle common fractions
+        var durationFractions = Object.keys(durationMap);
+        for (var i = 0; i < durationFractions.length; i++) {
+            if (Math.abs(n_duration_nor - parseFloat(durationFractions[i])) < 0.001) {
+                return durationMap[durationFractions[i]];
+            }
+        }
+        // Default to quarter note if not found
+        console.warn('Unknown duration:', n_duration_nor, 'Defaulting to quarter note.');
+        return 'q';
+    }
+
+    // Start drawing
+    var barCount = a_o_bar.length;
+    var currentX = margin_left;
+    var currentY = margin_top;
+
+    for (var i = 0; i < barCount; i++) {
+        var bar = a_o_bar[i];
+
+        // Create a stave
+        var stave = new VF.Stave(currentX, currentY, stave_width);
+
+        // Add clef and time signature on the first bar of each line
+        if (i % bars_per_line == 0) {
+            stave.addClef("treble").addTimeSignature(bar.n_time_signature_numerator + "/" + bar.n_time_signature_denominator);
+        }
+
+        stave.setContext(context).draw();
+
+        // Create notes array
+        var notes = [];
+
+        var noteCount = bar.a_o_note.length;
+        for (var j = 0; j < noteCount; j++) {
+            var noteData = bar.a_o_note[j];
+
+            // Map n_duration_nor to duration string
+            var duration = mapDuration(noteData.n_duration_nor);
+
+            // Map n_step to pitch
+            var notePitch = mapStepToPitch(noteData.n_step);
+
+            // Build the note
+            var note = new VF.StaveNote({clef: "treble", keys: [notePitch], duration: duration});
+
+            // If note is the current note, color it red
+            if (noteData === o_note__current) {
+                note.setStyle({fillStyle: 'red', strokeStyle: 'red'});
+            }
+
+            // Add dots for dotted notes
+            if (duration.indexOf('d') !== -1) {
+                note.addDotToAll();
+            }
+
+            // Remove the 'd' from duration for VexFlow
+            duration = duration.replace('d', '');
+
+            notes.push(note);
+        }
+
+        // Create a voice in the time signature
+        var voice = new VF.Voice({
+            num_beats: bar.n_time_signature_numerator,
+            beat_value: bar.n_time_signature_denominator,
+            resolution: VF.RESOLUTION
         });
-        const score = factory.EasyScore();
-        const context = factory.context;
-        context.setFont("Arial", 10, "").setBackgroundFillStyle("#eed");
 
-        // Create a system to manage staves
-        const system = new VF.System({ x: 50, y: 50, width: 500, spaceBetweenStaves: 10 });
+        voice.setMode(VF.Voice.Mode.SOFT);
 
-        // Create a 4/4 treble stave and add notes for the first bar
-        system.addStave({
-            voices: [
-                new VF.Voice({ num_beats: 4, beat_value: 4 }).addTickables([
-                    new VF.StaveNote({ keys: ["c/4"], duration: "q" }),
-                    new VF.StaveNote({ keys: ["d/4"], duration: "q" }),
-                    new VF.StaveNote({ keys: ["e/4"], duration: "q" }),
-                    new VF.StaveNote({ keys: ["f/4"], duration: "q" })
-                ])
-            ]
-        }).addClef('treble').addTimeSignature('4/4');
+        voice.addTickables(notes);
 
-        // Create the second bar with different notes
-        system.addStave({
-            voices: [
-                new VF.Voice({ num_beats: 4, beat_value: 4 }).addTickables([
-                    new VF.StaveNote({ keys: ["g/4"], duration: "q" }),
-                    new VF.StaveNote({ keys: ["a/4"], duration: "q" }),
-                    new VF.StaveNote({ keys: ["b/4"], duration: "q" }),
-                    new VF.StaveNote({ keys: ["c/5"], duration: "q" })
-                ])
-            ]
-        }).addClef('treble').addTimeSignature('4/4');
+        // Format and justify the notes to the width of the stave
+        var formatter = new VF.Formatter().joinVoices([voice]).format([voice], stave_width - 10);
 
-        // Create a third bar
-        system.addStave({
-            voices: [
-                new VF.Voice({ num_beats: 4, beat_value: 4 }).addTickables([
-                    new VF.StaveNote({ keys: ["d/5"], duration: "q" }),
-                    new VF.StaveNote({ keys: ["e/5"], duration: "q" }),
-                    new VF.StaveNote({ keys: ["f/5"], duration: "q" }),
-                    new VF.StaveNote({ keys: ["g/5"], duration: "q" })
-                ])
-            ]
-        }).addClef('treble').addTimeSignature('4/4');
+        // Render voice
+        voice.draw(context, stave);
 
-        // Draw everything to the canvas
-        system.format([system], 500);
-        system.draw(context);
-    </script>
+        // Update position
+        currentX += stave_width;
+
+        // Move to next line if needed
+        if ((i + 1) % bars_per_line == 0) {
+            currentX = margin_left;
+            currentY += stave_height + stave_spacing;
+        }
+    }
+</script>
 </body>
 </html>

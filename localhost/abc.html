@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sheet Music with ABCJS</title>
+<script src="./abcjs-basic-min.js"></script>
+</head>
+<body>
+<div id="paper"></div>
+<script>
+  // Your data structures
+  let o_ionian = {n_freq_base_a4: 440, s_name_kirchen_ladder: 'ionian'};
+    let a_o_bar = [
+        { // object 'o_bar'
+            n_time_signature_numerator: 4,
+            n_time_signature_denominator: 4,
+            n_bpm: 80,
+            a_o_note: [
+                { n_duration_nor: 1./4., n_step: 1,...o_ionian },
+                { n_duration_nor: 1./4., n_step: 2,...o_ionian },
+                { n_duration_nor: 1./4., n_step: 3,...o_ionian },
+                { n_duration_nor: 1./4., n_step: 1,...o_ionian },
+            ]
+        },
+        { // object 'o_bar'
+            n_time_signature_numerator: 4,
+            n_time_signature_denominator: 4,
+            n_bpm: 80,
+            a_o_note: [
+                { n_duration_nor: 1./4., n_step: 1,...o_ionian },
+                { n_duration_nor: 1./4., n_step: 2,...o_ionian },
+                { n_duration_nor: 1./4., n_step: 3,...o_ionian },
+                { n_duration_nor: 1./4., n_step: 1,...o_ionian },
+            ]
+        },
+        { // object 'o_bar'
+            n_time_signature_numerator: 4,
+            n_time_signature_denominator: 4,
+            n_bpm: 80,
+            a_o_note: [
+                { n_duration_nor: 1./4., n_step: 3,...o_ionian },
+                { n_duration_nor: 1./4., n_step: 4,...o_ionian },
+                { n_duration_nor: 2./4., n_step: 5,...o_ionian },
+            ]
+        },
+        { // object 'o_bar'
+            n_time_signature_numerator: 4,
+            n_time_signature_denominator: 4,
+            n_bpm: 80,
+            a_o_note: [
+                { n_duration_nor: 1./4., n_step: 3,...o_ionian },
+                { n_duration_nor: 1./4., n_step: 4,...o_ionian },
+                { n_duration_nor: 2./4., n_step: 5,...o_ionian },
+            ]
+        },
+        { // object 'o_bar'
+            n_time_signature_numerator: 4,
+            n_time_signature_denominator: 4,
+            n_bpm: 80,
+            a_o_note: [
+                { n_duration_nor: 1./8., n_step: 5,...o_ionian },
+                { n_duration_nor: 1./8., n_step: 6,...o_ionian },
+                { n_duration_nor: 1./8., n_step: 5,...o_ionian },
+                { n_duration_nor: 1./8., n_step: 4,...o_ionian },
+                { n_duration_nor: 1./4., n_step: 3,...o_ionian },
+                { n_duration_nor: 1./4., n_step: 1,...o_ionian },
+            ]
+        },
+        { // object 'o_bar'
+            n_time_signature_numerator: 4,
+            n_time_signature_denominator: 4,
+            n_bpm: 80,
+            a_o_note: [
+                { n_duration_nor: 1./8., n_step: 5,...o_ionian },
+                { n_duration_nor: 1./8., n_step: 6,...o_ionian },
+                { n_duration_nor: 1./8., n_step: 5,...o_ionian },
+                { n_duration_nor: 1./8., n_step: 4,...o_ionian },
+                { n_duration_nor: 1./4., n_step: 3,...o_ionian },
+                { n_duration_nor: 1./4., n_step: 1,...o_ionian },
+            ]
+        },
+        { // object 'o_bar'
+            n_time_signature_numerator: 4,
+            n_time_signature_denominator: 4,
+            n_bpm: 80,
+            a_o_note: [
+                { n_duration_nor: 1./4., n_step: 1,...o_ionian },
+                { n_duration_nor: 1./4., n_step: 5,...o_ionian },
+                { n_duration_nor: 2./4., n_step: 1,...o_ionian },
+            ]
+        },
+        { // object 'o_bar'
+            n_time_signature_numerator: 4,
+            n_time_signature_denominator: 4,
+            n_bpm: 80,
+            a_o_note: [
+                { n_duration_nor: 1./4., n_step: 1,...o_ionian },
+                { n_duration_nor: 1./4., n_step: 5,...o_ionian },
+                { n_duration_nor: 2./4., n_step: 1,...o_ionian },
+            ]
+        }
+    ];
+  let o_note__current = a_o_bar[2].a_o_note[2];
+
+</script>
+
+<script type="module">
+    import {
+    f_o_html__and_make_renderable,
+}
+from 'https://deno.land/x/f_o_html_from_o_js@4.0.2/mod.js'
+
+let a_s_piece = [
+  "X:1\nT:Notes / pitches\nM:C\nL:1/4\nK:C treble\nC, D, E, F, | G, A, B, C | D E F G | A B c d | e f g a | b c' d' e' | f' g' a' b' |]\n",
+  "X:1\nT:Note lengths\nM:\nK:C\nA/4 A/2 A/ A A2 A3 A4 A6 A7 A8 A12 A16 |]\n",
+  "X:1\nT:Beams\nM:C\nK:C\nA B c d AB cd | ABcd ABc2 | ABcdABcd |]\n",
+  "X:1\nT:Bar lines\nM:C\nK:C\n[| A4 A4 | A4 A4 || A4 A4 | A4 A4 |]\n|: A4 A4 | A4 A4 :: A4 A4 | A4 A4 ::\nA4 A4 | A4 A4 |1 A4 A4 :|2 A4 A4 | A4 A4 |]\n",
+  "X:1\nT:Unit note length\nT:Same notes / different notation\nM:\nK:C\nL:1/16\nA/2 A A2 A4 A8 A16 |]\nL:1/8\nA/4 A/2 A A2 A4 A8 |]\nL:1/4\nA/8 A/4 A/2 A A2 A4 |]\n",
+  "X:1\nT:Broken rhythm markers\nM:3/4\nK:C\nA>A A2>A2 | A<A A2<A2 | A>>A A2>>>A2 | A<<A A2<<<A2 |]\n",
+  "X:1\nT:Tuplets\nM:C\nK:C\n(2AB (3ABA (4ABAB (5ABABA (6ABABAB (7ABABABA|]\n",
+  "X:1\nT:Ties and slurs\nM:C\nK:C\n(AA) (A(A)A) ((AA)A) (A|A) A-A A-A-A A2-|A4|]\n",
+  "X:1\nT:Accidentals\nM:C\nK:C\n__A _A =A ^A ^^A |]\n",
+  "X:1\nT:Chord symbols\nM:C\nK:C\n\"A\"A \"Gm7\"D \"Bb\"F \"F#\"A |]\n",
+  "X:1\nT:Accents\nM:C\nK:C\n~A ~c .A .c vA vc uA uc|]\n",
+  "X:1\nT:Grace notes\nM:6/8\nK:C\n{g}A3 A{g}AA|{gAGAG}A3 {g}A{d}A{e}A|]\n",
+  "X:1\nT:Chords\nM:2/4\nK:C\n[CEGc] [C2G2] [CE][DF] | [D2F2][EG][FA] [A4d4]|]\n",
+  "X:1\nT:Keys and modes\nM:4/4\nK:C\nT:C/CMAJOR/Cmajor\nCDEF GABc |\\\nK:CMAJOR\nCDEF GABc |\\\nK:Cmajor\nCDEF GABc |]\nT:C maj/ C major/C Major\nK:C maj\nCDEF GABc |\\\nK: C major\nCDEF GABc |\\\nK:C Major\nCDEF GABc |]\nT:C Lydian/C Ionian/C Mixolydian\nK:C Lydian\nCDEF GABc |\\\nK:C Ionian\nCDEF GABc |\\\nK:C Mixolydian\nCDEF GABc |]\nT:C Dorian/C Minor/Cm\nK:C Dorian\nCDEF GABc |\\\nK:C Minor\nCDEF GABc |\\\nK:Cm\nCDEF GABc |]\nT:C Aeolian/C Phrygian/C Locrian\nK:C Aeolian\nCDEF GABc |\\\nK:C Phrygian\nCDEF GABc |\\\nK:C Locrian\nCDEF GABc |]\n",
+  "X:1\nT:Speed the Plough\nM:4/4\nC:Trad.\nK:G\n|:GABc dedB|dedB dedB|c2ec B2dB|c2A2 A2BA|\n  GABc dedB|dedB dedB|c2ec B2dB|A2F2 G4:|\n|:g2gf gdBd|g2f2 e2d2|c2ec B2dB|c2A2 A2df|\n  g2gf g2Bd|g2f2 e2d2|c2ec B2dB|A2F2 G4:|\n",
+  "X:1\nT:Paddy O'Rafferty (Jig)\nC:Trad.\nO:Irish\nR:Jig\nM:6/8\nK:D\ndff cee|def gfe|dff cee|dfe dBA|\ndff cee|def gfe|faf gfe|1 dfe dBA:|2 dfe dcB|]\n~A3 B3|gfe fdB|AFA B2c|dfe dcB|\n~A3 ~B3|efe efg|faf gfe|1 dfe dcB:|2 dfe dBA|]\nfAA eAA|def gfe|fAA eAA|dfe dBA|\nfAA eAA|def gfe|faf gfe|dfe dBA:|\n",
+  "X:1\nT:Kitchen Girl (Reel)\nC:Trad.\nO:American\nR:Reel\nM:C\nK:D\n[a4c4] [g4B4]|efed c2cd|e2f2 gaba|g2e2 e2fg|\na4 g4|efed cdef|g2d2 efed|c2A2 A4:|\nK:G\nABcA BAGB|ABAG EDEG|A2AB c2d2|e3f edcB|\nABcA BAGB|ABAG EGAB|cBAc BAG2|A4 A4:|\n",
+  "X:1                        % tune no 1\nT:Dusty Miller (commented) % title\nT:Binny's Jig              % an alternative title\nC:Trad.                    % traditional\nO:English                  % origin\nR:DH                       % double hornpipe\nM:3/4                      % meter\nK:G                        % key\nB>cd BAG|FA Ac BA|B>cd BAG|DG GB AG:|\nBdd gfg|aA Ac BA|Bdd gfa|gG GB AG:|\nBG G/2G/2G BG|FA Ac BA|BG G/2G/2G BG|DG GB AG:|\nW:Hey, the dusty miller, and his dusty coat;\nW:He will win a shilling, or he spend a groat.\nW:Dusty was the coat, dusty was the colour;\nW:Dusty was the kiss, that I got frae the miller.\n",
+  "X:1\nT:Old Sir Simon the King (commented)\nC:Trad.               % composer\nS:Offord MSS          % source\nN:see also Playford   % notes\nM:9/8                 % meter\nR:SJ                  % rhythm\nQ:1/4=160             % tempo\nZ:originally in C     % transcription notes\nK:G                   % key\nD|GFG GAG G2D|GFG GAG F2D|EFE EFE EFG|A2G F2E D2:|\nD|GAG GAB d2D|GAG GAB c2D|[1 EFE EFE EFG|A2G F2E D2:|\nM:12/8                % change meter for a bar\n[2 E2E EFE E2E EFG|\\\nM:9/8                 % change back again\nA2G F2E D2|]\n",
+  "X:1\nT:Jericho (chord symbols)\nT:Joshua fought the battle of Jericho\nC:Anon.\nM:C\nL:1/8\nK:Dm\n\"Dm\"D^CDE FF G2|\"Dm\"A A2 A-A4|\"A7\"G G2 G-G4|\"Dm\"A A2 A-A4|\n\"Dm\"D^CDE FF G2|\"Dm\"A A2 A-A2 FG|\"A7\"A2 G2 F2 E2|\"Dm\"D6\"^Fine\"||dd|\n\"Dm\"dA AA A3 A|\"Dm\"A A3- \"A7\"A2 AA|\"Dm\"AA AA A2 A2|\"A7\"A6 ^c2|\n\"Dm\"d2 A2 \"A7\"A A3|\"Dm\"A2 A2- \"A7\"A2 AA|\"Dm\"AA G2 \"A7\"E2 D2|\"Dm\"D8|]\n",
+  "X:1\nT:Jericho (tenor sax)\nT:Joshua fought the battle of Jericho\nN:adapted for transposing instruments such as a tenor sax\nN:see https://www.youtube.com/watch?v=M5r0I3xTP6I&t=1230s\nC:Anon.\nM:C\nL:1/8\n%%MIDI transpose -14\n%%MIDI program 67\n%%MIDI chordprog 1 octave=2\n%%MIDI bassprog 1 octave=2\nR:Hornpipe\nK:Dm\n\"Dm\"D^CDE FF G2|\"Dm\"A A2 A-A4|\"A7\"G G2 G-G4|\"Dm\"A A2 A-A4|\n\"Dm\"D^CDE FF G2|\"Dm\"A A2 A-A2 FG|\"A7\"A2 G2 F2 E2|\"Dm\"D6\"^Fine\"||dd|\n\"Dm\"dA AA A3 A|\"Dm\"A A3- \"A7\"A2 AA|\"Dm\"AA AA A2 A2|\"A7\"A6 ^c2|\n\"Dm\"d2 A2 \"A7\"A A3|\"Dm\"A2 A2- \"A7\"A2 AA|\"Dm\"AA G2 \"A7\"E2 D2|\"Dm\"D8|]\n%%writefields N\n",
+  "X:1\nT:Jericho (hidden voice)\nT:Joshua fought the battle of Jericho\nN:using a hidden voice to separate out the chord symbols\nN:see https://youtu.be/HxLKo4HL19g\nC:Anon.\nM:C\nL:1/8\nR:Hornpipe\n%%MIDI transpose -14\n%%staves (melody chords)\nK:Dm\nV:melody\n%%MIDI program 67\nD^CDE FF G2|A A2 A-A4|G G2 G-G4|A A2 A-A4|\nD^CDE FF G2|A A2 A-A2 FG|A2 G2 F2 E2|D6\"^Fine\"||dd|\ndA AA A3 A|A A3- A2 AA|AA AA A2 A2|A6 ^c2|\nd2 A2 A A3|A2 A2- A2 AA|AA G2 E2 D2|D8|]\nV:chords\n%%MIDI chordprog 1 octave=2\n%%MIDI bassprog 1 octave=2\n\"Dm\"x4     x4 | \"Dm\"x4     x4 | \"A7\"x4     x4 | \"Dm\"x4 x4 |\n\"Dm\"x4     x4 | \"Dm\"x4     x4 | \"A7\"x4     x4 | \"Dm\"x4 x4 |\n\"Dm\"x4     x4 | \"Dm\"x4 \"A7\"x4 | \"Dm\"x4     x4 | \"A7\"x4 x4 |\n\"Dm\"x4 \"A7\"x4 | \"Dm\"x4 \"A7\"x4 | \"Dm\"x4 \"A7\"x4 | \"Dm\"x4 x4 |]\n",
+  "X:1\nT:Lyrics\nN:see https://www.youtube.com/watch?v=RWNeCjid0zc\nM:4/4\nL:1/4\nK:C\n% use the w: field to add lyrics, with each word lined up on a note\nA A A A | A A A A |\nw:words line up on notes\n%\n% to align syllables on notes, use hyphens and/or spaces to split the words up\nA A A A | A A A A |\nw:syl-la-ble, syl- la- ble\n%\n% to align two (or more) syllables on a single note, don't split them up or use backslash hypen \\-\nA2  A2 | A2 A2 | \nw:syllable, syl\\-la\\-ble\n%\n% to align two (or more) words on a single note, use a tilde ~ between the words\nA4 | A A A A | \nw:word~word syl-la-ble\n%\n% to align two (or more) notes on a syllable or word, use an underscore\nA2  A2 | A A A A  | \nw:word_ syl-la-ble_\n%\n% to skip one (or more) notes, i.e. to include blank syllables, use an asterisk *\nA A A A | A A A A |\nw:word * * * syl-la-ble *\n%\n% to save typing in lots of asterisks, advance to the next barline with a bar symbol |\nA A A A | A A A A |\nw:word | syl-la-ble |\n%\n% to include multipe verses, use multiple w: fields\nA A A A | A A A A |\nw:syl-la-ble | syl- la- ble\nw:word | syl-la-ble \n%\n% to include more verses underneath use W: fields (upper case)\nW: This is verse two of my song\nW: Syl-la-ble, word\nW: \nW: This is verse three of my song\nW: Word, word, syl-la-ble!\nW: \n%%writefields N\n"
+]
+// for(let s_piece of a_s_piece){
+//     let o = document.createElement('div');
+//     o.id = new Date().getTime();
+//     let o2 = document.createElement('textarea');
+//     o2.rows = 10;
+//     o2.style.width = '100%'
+//     o2.innerHTML = s_piece;
+//     document.body.appendChild(o2)
+//     document.body.appendChild(o);
+//     ABCJS.renderAbc(o.id, s_piece);
+// }
+let o_state = {}
+document.body.appendChild(
+    await f_o_html__and_make_renderable(
+        {
+            a_o: [
+                ...a_s_piece.map((s_piece, n_idx)=>{
+                    let s_id = `o_js__${n_idx}`
+                    return {
+                        a_o: [
+                            {
+                                style: "width:100%",
+                                rows:10,
+                                s_tag: "textarea", 
+                                innerHTML: s_piece, 
+                                oninput: async (o_e)=>{
+                                    s_piece = o_e.target.value;
+                                    a_s_piece[n_idx] = s_piece
+                                    await o_state[s_id]._f_render();
+                                }
+                            }, 
+                            Object.assign(
+                                o_state, 
+                                {
+                                    [s_id]: {
+                                        f_after_f_o_html__and_make_renderable:(o_e)=>{
+                                            console.log('render')
+
+                                            let s_id = `n_idx${n_idx}`;
+                                            // console.log(a_s_piece[n_idx])
+                                            // console.log(`n_idx${n_idx}`)
+                                            s_piece = a_s_piece[n_idx];
+                                            // console.log(s_piece)
+                                            console.log(document.querySelector(`#${s_id}`));
+                                            ABCJS.renderAbc(o_e, s_piece);
+                                        },
+                                        f_o_jsh:()=>{
+                                            return {
+                                                id: `n_idx${n_idx}`
+                                            }
+                                        }
+                                    }
+                                }
+                            )[s_id]
+                        ]
+                    } 
+                    
+                    
+                    
+                })
+            ]
+        }
+    )
+)
+</script>
+
+</body>
+</html>

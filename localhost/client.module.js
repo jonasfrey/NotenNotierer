@@ -23,20 +23,28 @@ import {
     f_s_hms__from_n_ts_ms_utc,
 } from "https://deno.land/x/date_functions@1.4/mod.js"
 
-let f_o_beat = function(
+let f_o_note = function(
     n_duration_nor, 
-    s_step // stufe
+    s_step,//stufe
+    n_freq_base_a4 = 440, 
+    s_name_kirchen_ladder = 'aeolian'
 ){
     return {
         n_duration_nor, 
-        s_step
+        s_step, 
+        n_freq_base_a4, 
+        s_name_kirchen_ladder
     }
 }
 let f_o_bar = function(
-    a_o_beat
+    a_o_note, 
+    n_time_signature_numerator, 
+    n_time_signature_denominator, 
 ){
     return {
-        a_o_beat
+        a_o_note, 
+        n_time_signature_numerator,
+        n_time_signature_denominator
     }
 }
 let n_bpm = 120;
@@ -52,48 +60,48 @@ let o_state = {
     n_ms_per_beat: (60*1000)/n_bpm*4.,
     b_edit_mode: false,
     o_beat: null,
-    a_o_beat: [
-        f_o_beat(1./4., '1'),
-        f_o_beat(1./4., '2'),
-        f_o_beat(1./4., '3'),
-        f_o_beat(1./4., '1'),
-        f_o_beat(1./4., '1'),
-        f_o_beat(1./4., '2'),
-        f_o_beat(1./4., '3'),
-        f_o_beat(1./4., '1'),
-        f_o_beat(1./4., '3'),
-        f_o_beat(1./4., '4'),
-        f_o_beat(2./4., '5'),
-        f_o_beat(1./4., '3'),
-        f_o_beat(1./4., '4'),
-        f_o_beat(2./4., '5'),
-        f_o_beat(1./8., '5'),
-        f_o_beat(1./8., '6'),
-        f_o_beat(1./8., '5'),
-        f_o_beat(1./8., '4'),
-        f_o_beat(1./4., '3'),
-        f_o_beat(1./4., '1'),
-        f_o_beat(1./8., '5'),
-        f_o_beat(1./8., '6'),
-        f_o_beat(1./8., '5'),
-        f_o_beat(1./8., '4'),
-        f_o_beat(1./4., '3'),
-        f_o_beat(1./4., '1'),
-        f_o_beat(1./4., '1'),
-        f_o_beat(1./4., '5'),
-        f_o_beat(2./4., '1'),
-        f_o_beat(1./4., '1'),
-        f_o_beat(1./4., '5'),
-        f_o_beat(2./4., '1')
+    a_o_note: [
+        f_o_note(1./4., '1'),
+        f_o_note(1./4., '2'),
+        f_o_note(1./4., '3'),
+        f_o_note(1./4., '1'),
+        f_o_note(1./4., '1'),
+        f_o_note(1./4., '2'),
+        f_o_note(1./4., '3'),
+        f_o_note(1./4., '1'),
+        f_o_note(1./4., '3'),
+        f_o_note(1./4., '4'),
+        f_o_note(2./4., '5'),
+        f_o_note(1./4., '3'),
+        f_o_note(1./4., '4'),
+        f_o_note(2./4., '5'),
+        f_o_note(1./8., '5'),
+        f_o_note(1./8., '6'),
+        f_o_note(1./8., '5'),
+        f_o_note(1./8., '4'),
+        f_o_note(1./4., '3'),
+        f_o_note(1./4., '1'),
+        f_o_note(1./8., '5'),
+        f_o_note(1./8., '6'),
+        f_o_note(1./8., '5'),
+        f_o_note(1./8., '4'),
+        f_o_note(1./4., '3'),
+        f_o_note(1./4., '1'),
+        f_o_note(1./4., '1'),
+        f_o_note(1./4., '5'),
+        f_o_note(2./4., '1'),
+        f_o_note(1./4., '1'),
+        f_o_note(1./4., '5'),
+        f_o_note(2./4., '1')
     ], 
     a_o_bar: []
 };
 const { Renderer, Stave, StaveNote, Voice, Formatter } = Vex.Flow;
 
 let f_update_o_beat__from_n_idx_summand = function(n_idx_summand){
-    let n_idx_beat = o_state.a_o_beat.indexOf(o_state.o_beat);
-    let n_idx_beat_new = f_n_idx_ensured_inside_array(n_idx_summand, o_state.a_o_beat.length);
-    o_state.o_beat = o_state.a_o_beat[n_idx_beat_new]
+    let n_idx_beat = o_state.a_o_note.indexOf(o_state.o_beat);
+    let n_idx_beat_new = f_n_idx_ensured_inside_array(n_idx_summand, o_state.a_o_note.length);
+    o_state.o_beat = o_state.a_o_note[n_idx_beat_new]
     return o_state.o_beat
 }
 window.addEventListener('click', ()=>{
@@ -298,7 +306,7 @@ let f_update_canvas = function(){
             voices: [
                 score.voice(
                     score.notes(
-                        o_bar.a_o_beat.map(o_beat=>{
+                        o_bar.a_o_note.map(o_beat=>{
                             let o_info = f_o_info(
                             parseFloat(o_beat.s_step)
                             );
@@ -321,7 +329,7 @@ let f_update_canvas = function(){
             ]
         }).addClef('treble').addTimeSignature('4/4');
 
-        // let a_o_note = o_bar.a_o_beat.map(o_beat=>{
+        // let a_o_note = o_bar.a_o_note.map(o_beat=>{
         //     let o_info = f_o_info(
         //         parseFloat(o_beat.s_step)
         //         );
@@ -347,9 +355,9 @@ let f_update_a_o_bar = function(){
     let n_nor_acc = 0;
     let n_nor_max_per_bar = o_state.n_number_of_beats_per_bar*o_state.n_nor_type_of_beat_in_bar;
     let o_bar = f_o_bar([]);
-    for(let o_beat of o_state.a_o_beat){
+    for(let o_beat of o_state.a_o_note){
         n_nor_acc += o_beat.n_duration_nor;
-        o_bar.a_o_beat.push(o_beat);
+        o_bar.a_o_note.push(o_beat);
         console.log(o_beat.n_duration_nor)
         if(n_nor_acc >= n_nor_max_per_bar){
             n_nor_acc = 0
@@ -401,7 +409,7 @@ document.body.appendChild(
                     innerText: "Play", 
                     onclick: async ()=>{
                         if(!o_state.o_beat){
-                            o_state.o_beat = o_state.o_bar.a_o_beat[0]
+                            o_state.o_beat = o_state.o_bar.a_o_note[0]
                         }
                         let n_ms_timeout = 0;
                         let f_recursive = function(){
@@ -435,7 +443,7 @@ document.body.appendChild(
                                     return {
                                         class: "o_bar",
                                         a_o: [
-                                            ...o_bar.a_o_beat.map(o_beat=>{
+                                            ...o_bar.a_o_note.map(o_beat=>{
                                                 return {
                                                     class: `clickable o_beat ${(o_state.o_beat == o_beat) ? 'clicked' : ''}`,
                                                     innerText: o_beat.s_step, 
@@ -457,10 +465,10 @@ document.body.appendChild(
                                             f_o_bar(
                                                 1./4., 
                                                 [
-                                                    f_o_beat(1./4., ''),
-                                                    f_o_beat(1./4., ''),
-                                                    f_o_beat(1./4., ''),
-                                                    f_o_beat(1./4., ''),
+                                                    f_o_note(1./4., ''),
+                                                    f_o_note(1./4., ''),
+                                                    f_o_note(1./4., ''),
+                                                    f_o_note(1./4., ''),
                                                 ]
                                             )
                                         )

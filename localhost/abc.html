@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <title>Sheet Music with ABCJS</title>
 <script src="./abcjs-basic-min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/abcjs@6.0.0-beta.28/abcjs-audio.css">
+
 </head>
 <body>
 <div id="paper"></div>
@@ -109,8 +111,8 @@
     f_o_html__and_make_renderable,
 }
 from 'https://deno.land/x/f_o_html_from_o_js@4.0.2/mod.js'
-
-let a_s_piece = [
+let o_state = {
+    a_s_piece : [
   "X:1\nT:Notes / pitches\nM:C\nL:1/4\nK:C treble\nC, D, E, F, | G, A, B, C | D E F G | A B c d | e f g a | b c' d' e' | f' g' a' b' |]\n",
   "X:1\nT:Note lengths\nM:\nK:C\nA/4 A/2 A/ A A2 A3 A4 A6 A7 A8 A12 A16 |]\n",
   "X:1\nT:Beams\nM:C\nK:C\nA B c d AB cd | ABcd ABc2 | ABcdABcd |]\n",
@@ -134,7 +136,13 @@ let a_s_piece = [
   "X:1\nT:Jericho (tenor sax)\nT:Joshua fought the battle of Jericho\nN:adapted for transposing instruments such as a tenor sax\nN:see https://www.youtube.com/watch?v=M5r0I3xTP6I&t=1230s\nC:Anon.\nM:C\nL:1/8\n%%MIDI transpose -14\n%%MIDI program 67\n%%MIDI chordprog 1 octave=2\n%%MIDI bassprog 1 octave=2\nR:Hornpipe\nK:Dm\n\"Dm\"D^CDE FF G2|\"Dm\"A A2 A-A4|\"A7\"G G2 G-G4|\"Dm\"A A2 A-A4|\n\"Dm\"D^CDE FF G2|\"Dm\"A A2 A-A2 FG|\"A7\"A2 G2 F2 E2|\"Dm\"D6\"^Fine\"||dd|\n\"Dm\"dA AA A3 A|\"Dm\"A A3- \"A7\"A2 AA|\"Dm\"AA AA A2 A2|\"A7\"A6 ^c2|\n\"Dm\"d2 A2 \"A7\"A A3|\"Dm\"A2 A2- \"A7\"A2 AA|\"Dm\"AA G2 \"A7\"E2 D2|\"Dm\"D8|]\n%%writefields N\n",
   "X:1\nT:Jericho (hidden voice)\nT:Joshua fought the battle of Jericho\nN:using a hidden voice to separate out the chord symbols\nN:see https://youtu.be/HxLKo4HL19g\nC:Anon.\nM:C\nL:1/8\nR:Hornpipe\n%%MIDI transpose -14\n%%staves (melody chords)\nK:Dm\nV:melody\n%%MIDI program 67\nD^CDE FF G2|A A2 A-A4|G G2 G-G4|A A2 A-A4|\nD^CDE FF G2|A A2 A-A2 FG|A2 G2 F2 E2|D6\"^Fine\"||dd|\ndA AA A3 A|A A3- A2 AA|AA AA A2 A2|A6 ^c2|\nd2 A2 A A3|A2 A2- A2 AA|AA G2 E2 D2|D8|]\nV:chords\n%%MIDI chordprog 1 octave=2\n%%MIDI bassprog 1 octave=2\n\"Dm\"x4     x4 | \"Dm\"x4     x4 | \"A7\"x4     x4 | \"Dm\"x4 x4 |\n\"Dm\"x4     x4 | \"Dm\"x4     x4 | \"A7\"x4     x4 | \"Dm\"x4 x4 |\n\"Dm\"x4     x4 | \"Dm\"x4 \"A7\"x4 | \"Dm\"x4     x4 | \"A7\"x4 x4 |\n\"Dm\"x4 \"A7\"x4 | \"Dm\"x4 \"A7\"x4 | \"Dm\"x4 \"A7\"x4 | \"Dm\"x4 x4 |]\n",
   "X:1\nT:Lyrics\nN:see https://www.youtube.com/watch?v=RWNeCjid0zc\nM:4/4\nL:1/4\nK:C\n% use the w: field to add lyrics, with each word lined up on a note\nA A A A | A A A A |\nw:words line up on notes\n%\n% to align syllables on notes, use hyphens and/or spaces to split the words up\nA A A A | A A A A |\nw:syl-la-ble, syl- la- ble\n%\n% to align two (or more) syllables on a single note, don't split them up or use backslash hypen \\-\nA2  A2 | A2 A2 | \nw:syllable, syl\\-la\\-ble\n%\n% to align two (or more) words on a single note, use a tilde ~ between the words\nA4 | A A A A | \nw:word~word syl-la-ble\n%\n% to align two (or more) notes on a syllable or word, use an underscore\nA2  A2 | A A A A  | \nw:word_ syl-la-ble_\n%\n% to skip one (or more) notes, i.e. to include blank syllables, use an asterisk *\nA A A A | A A A A |\nw:word * * * syl-la-ble *\n%\n% to save typing in lots of asterisks, advance to the next barline with a bar symbol |\nA A A A | A A A A |\nw:word | syl-la-ble |\n%\n% to include multipe verses, use multiple w: fields\nA A A A | A A A A |\nw:syl-la-ble | syl- la- ble\nw:word | syl-la-ble \n%\n% to include more verses underneath use W: fields (upper case)\nW: This is verse two of my song\nW: Syl-la-ble, word\nW: \nW: This is verse three of my song\nW: Word, word, syl-la-ble!\nW: \n%%writefields N\n"
-]
+], 
+s_piece_random: '',
+a_s_note_available_random: [
+    'C', 'D', 'E', 'F', 'G', 'A', 'B', 'c', 'd', 'e', 'f'
+], 
+n_random_notes: 20
+}
 // for(let s_piece of a_s_piece){
 //     let o = document.createElement('div');
 //     o.id = new Date().getTime();
@@ -146,12 +154,134 @@ let a_s_piece = [
 //     document.body.appendChild(o);
 //     ABCJS.renderAbc(o.id, s_piece);
 // }
-let o_state = {}
+
+window.o_state = o_state
+
 document.body.appendChild(
     await f_o_html__and_make_renderable(
         {
             a_o: [
-                ...a_s_piece.map((s_piece, n_idx)=>{
+                {
+                    a_o: [
+                        {
+                            s_tag: 'input', 
+                            type: "number", 
+                            min: 1, 
+                            max: 1000, 
+                            oninput: (o_e)=>{
+                                o_state.n_random_notes = parseInt(o_e.target.value);
+                            }, 
+                            value: o_state.n_random_notes
+                        },
+                        {
+                            s_tag: "button", 
+                            innerText: "random", 
+                            onclick: ()=>{
+                                console.log('asdf')
+                                o_state.s_piece_random = `
+T:Random Notes
+Q:60
+L:1/4
+K:C
+${new Array(o_state.n_random_notes).fill(0).map(
+    (n)=>{
+        let s = o_state.a_s_note_available_random[
+            parseInt(Math.random()*o_state.a_s_note_available_random.length)
+        ]
+        console.log(s);
+        return `"^${s}"${s}`
+    }
+).join(' ')}
+                                `
+                                o_state.o_js__random_notes._f_render();
+
+                            }
+                        },
+                        {
+                            s_tag: "textarea", 
+                            innerText: o_state.a_s_note_available_random.join(' '), 
+                            oninput:(o_e)=>{
+                                o_state.a_s_note_available_random = o_e.target.value.split(' ').map(s=>s.trim());
+                            }
+                        },
+
+                        {
+                            id: "audio",
+                        },
+                        Object.assign(
+                            o_state, 
+                            {
+                                o_js__random_notes: {
+                                    f_after_f_o_html__and_make_renderable: (o_e) => {
+                                        let o_e2 = document.querySelector('#randomnotes');
+                                        let visualObj = ABCJS.renderAbc(o_e2, o_state.s_piece_random); // Get visualObj from renderAbc
+                                        
+                                        // Set up the audio
+                                        if (document.querySelector('#audio')) {
+
+                                            // given that there are two elements in the DOM with the IDs "paper" and "audio"
+                                            var cursorControl = {}
+                                            var abc = o_state.s_piece_random;
+                                            var abcOptions = { add_classes: true };
+                                            var audioParams = { chordsOff: true, millisecondsPerMeasure: 2000, options:{qpm: 50} };
+
+                                            if (ABCJS.synth.supportsAudio()) {  
+                                                var synthControl = new ABCJS.synth.SynthController();
+                                                synthControl.load("#audio", 
+                                                    cursorControl, 
+                                                    {
+                                                        displayLoop: true, 
+                                                        displayRestart: true, 
+                                                        displayPlay: true, 
+                                                        displayProgress: true, 
+                                                        displayWarp: true
+                                                    }
+                                                );
+
+                                           
+                                                var createSynth = new ABCJS.synth.CreateSynth();
+                                                createSynth.init({ visualObj: visualObj[0] }).then(function () {
+                                                    synthControl.setTune(visualObj[0], false, audioParams).then(function () {
+                                                        console.log("Audio successfully loaded.")
+                                                    }).catch(function (error) {
+                                                        console.warn("Audio problem:", error);
+                                                    });
+                                                }).catch(function (error) {
+                                                    console.warn("Audio problem:", error);
+                                                });
+                                            } else {
+                                                document.querySelector("#audio").innerHTML = 
+                                                    "Audio is not supported in this browser.";
+                                                }
+                                            }
+
+                                        
+                                    },
+                                    f_o_jsh: ()=>{
+                                        return {
+                                            
+                                            a_o: [
+                                                {
+                                                    style: "width:100%",
+                                                    rows:10,
+                                                    s_tag: "textarea", 
+                                                    innerHTML: o_state.s_piece_random, 
+                                                    oninput: async (o_e)=>{
+                                                        
+                                                    }
+                                                }, 
+                                                {
+                                                    id: "randomnotes"
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        ).o_js__random_notes,
+                    ]
+                },
+                ...o_state.a_s_piece.map((s_piece, n_idx)=>{
                     let s_id = `o_js__${n_idx}`
                     return {
                         a_o: [
@@ -162,7 +292,7 @@ document.body.appendChild(
                                 innerHTML: s_piece, 
                                 oninput: async (o_e)=>{
                                     s_piece = o_e.target.value;
-                                    a_s_piece[n_idx] = s_piece
+                                    o_state.a_s_piece[n_idx] = s_piece
                                     await o_state[s_id]._f_render();
                                 }
                             }, 
@@ -174,9 +304,9 @@ document.body.appendChild(
                                             console.log('render')
 
                                             let s_id = `n_idx${n_idx}`;
-                                            // console.log(a_s_piece[n_idx])
+                                            // console.log(o_state.a_s_piece[n_idx])
                                             // console.log(`n_idx${n_idx}`)
-                                            s_piece = a_s_piece[n_idx];
+                                            s_piece = o_state.a_s_piece[n_idx];
                                             // console.log(s_piece)
                                             console.log(document.querySelector(`#${s_id}`));
                                             ABCJS.renderAbc(o_e, s_piece);

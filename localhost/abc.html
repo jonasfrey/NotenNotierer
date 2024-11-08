@@ -184,7 +184,8 @@ Q:60
 L:1/4
 K:C
 ${new Array(o_state.n_random_notes).fill(0).map(
-    (n)=>{
+    (n, n_idx)=>{
+        if(n_idx%20 == 0){return '||\n'}
         let s = o_state.a_s_note_available_random[
             parseInt(Math.random()*o_state.a_s_note_available_random.length)
         ]

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sheet Music with ABCJS</title>
+<script src="./abcjs-basic-min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/abcjs@6.0.0-beta.28/abcjs-audio.css">
+
+</head>
+<body>
+
+
+<script type="module">
+    import {
+    f_o_html__and_make_renderable,
+}
+from 'https://deno.land/x/f_o_html_from_o_js@4.0.2/mod.js'
+
+import {
+    f_add_css,
+    f_s_css_prefixed,
+    o_variables, 
+    f_s_css_from_o_variables
+} from "https://deno.land/x/f_add_css@1.1/mod.js"
+
+f_add_css(`
+  .a_o_voice{
+    display:flex;
+    flex-direction:row;
+    width:100%;
+  }
+  .o_voice{
+    flex:1 1 auto;
+  }
+  textarea{
+    width:100%;
+  }
+`)
+let f_o_voice = function(
+  {
+    s_name = 'name_here', 
+    s_abc_text = 'T:Music'
+  }
+){
+  return {
+    s_name, 
+    s_abc_text
+  }
+}
+let o_state = {
+  n_voices: 3, 
+  a_o_voice: [
+  f_o_voice({s_name: "Bass", s_abc_text: `X: 1
+T: ABC Music
+M: 4/4
+L: 1/4
+|A A/2A/2 e/2e/2 e| A A/2A/2 e e|`}),
+f_o_voice({s_name: "Med", s_abc_text: `X: 1
+T: ABC Music
+M: 4/4
+L: 1/4
+|A A/2A/2 e/2e/2 e| A A/2A/2 e e|`}),
+f_o_voice({s_name: "High", s_abc_text: `X: 1
+T: ABC Music
+M: 4/4
+L: 1/4
+|A A/2A/2 e/2e/2 e| A A/2A/2 e e|`}),
+
+]}
+
+window.o_state = o_state
+
+let f_update_voice = function(o_voice){
+  let n_idx = o_state.a_o_voice.indexOf(o_voice);
+  let o_e2 = document.querySelector(`#o_voice_${n_idx}`);
+  let visualObj = ABCJS.renderAbc(o_e2, o_voice.s_abc_text); // Get visualObj from renderAbc
+}
+document.body.appendChild(
+    await f_o_html__and_make_renderable(
+        { 
+            class: "a_o_voice",
+            a_o: o_state.a_o_voice.map((o_voice, n_idx)=>{
+                return {
+                  class: "o_voice",
+                  a_o: [
+                    {
+                      s_tag: 'textarea',
+                      rows: 10,
+                      value: o_voice.s_abc_text, 
+                      oninput: (o_e)=>{
+                        o_voice.s_abc_text = o_e.target.value
+                        f_update_voice(o_voice);
+                                        
+                      }
+                    },
+                    {
+                      id: `o_voice_${n_idx}`, 
+                    }
+                  ]
+                }
+              }),
+        }
+    )
+)
+</script>
+
+</body>
+</html>
